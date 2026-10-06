@@ -1,6 +1,6 @@
 ## Interface: 11200
 ## Title: ShardCapFixed
 ## Notes: Never carry too many shards. Type /scf
-## Author: The Johnnest of them all, Modified by Paduk, Fixed by Vasi
+## Author: Fixed by Vasi
 ## SavedVariablesPerCharacter: SCF_CAP_VALUE, SCF_SPAM
 ShardCapFixed.lua
