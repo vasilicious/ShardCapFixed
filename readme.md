@@ -12,7 +12,7 @@ This addon deletes backwards, so that your shards always fill your soulbag first
 - Move the "ShardCapFixed" folder into the addons folder. 
 
 ## Slash commands
-- /scf			→ show current cap
+- /scf			→ show soul shards count (current/max)
 - /scf 5		→ set cap to 5
 - /scf notif	→ toggle notifications
 - /scf deletes	→ delete excess shards
