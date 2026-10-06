@@ -144,16 +144,16 @@ local f = CreateFrame'Frame'
 f:RegisterEvent'BAG_UPDATE'
 f:RegisterEvent'PLAYER_REGEN_ENABLED'
 
-local bagUpdated, inCombat = nil, nil
+local bagUpdated, combatEnded = nil, nil
 f:SetScript('OnEvent', function()
     if event == "BAG_UPDATE" then
         bagUpdated = true
     elseif event == "PLAYER_REGEN_ENABLED" then
-        inCombat = false
+        combatEnded = true
     end
 
-    if bagUpdated and not inCombat then
-        bagUpdated, inCombat = nil, nil
+    if bagUpdated and combatEnded then
+        bagUpdated, combatEnded = nil, nil
         delShards(SCF_CAP_VALUE)
     end
 end)
