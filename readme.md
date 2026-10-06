@@ -4,11 +4,7 @@ Super lightweight and invisible addon.
 
 Automagically deletes Soul Shards above the cap - when you exit combat (default 12). 
 
-This addon deletes backwards, so that your shards always fill your soulbag first. 
-
-Leveling with Improved Drain Soul is effective, but it can also be a hassle. Your bags fill up with shards! And lowbies don't have much bagspace to begin with.
-
-At levels 10-20, I normally set it 5 because bags are small and soulbags come later. 
+This addon deletes backwards, so that your shards always fill your soulbag first.
 
 ## Install
 - Unzip. 
@@ -32,4 +28,6 @@ At levels 10-20, I normally set it 5 because bags are small and soulbags come la
 - Changed default to 12 (up from 5)
 
 ## Fork Information
-This is a fork of the original ShardCap addon, modified to work with servers where Soul Shards stack (up to 3 per bag slot on Turtle WoW), with partial delete.
+This is a fork of the original ShardCap addon, modified to work with servers where Soul Shards stack (up to 3 per bag slot on Turtle WoW).
+
+The original fork was deleting the whole stack (e.g if cap is 6, 3 per slot, it would delete the entire stack with 3, making the total count 4). I changed the deletion logic so that the total count is still 6.

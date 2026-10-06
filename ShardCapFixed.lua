@@ -4,12 +4,29 @@ SCF_SPAM=false;
 
 function delShards(cap)
     local total_shards = 0
-    -- Calculate total number of Soul Shards across all bags
+    local maxStackCount = 0
+    local stacks = {}
+
+    -- Scan inventory once
     for bag = 0, 4 do
         for slot = 1, GetContainerNumSlots(bag) do
             if shardTest(bag, slot) then
                 local _, itemCount = GetContainerItemInfo(bag, slot)
+
                 total_shards = total_shards + itemCount
+
+                if not stacks[itemCount] then
+                    stacks[itemCount] = {}
+                end
+
+                table.insert(stacks[itemCount], {
+                    bag = bag,
+                    slot = slot
+                })
+
+                if itemCount > maxStackCount then
+                    maxStackCount = itemCount
+                end
             end
         end
     end
@@ -19,35 +36,37 @@ function delShards(cap)
         DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Total [Soul Shard] found: " .. total_shards)
     end
 
-    -- Delete shards if total exceeds the cap
-	local excess = total_shards - cap
+    local excess = total_shards - cap
+    if excess <= 0 then
+        return
+    end
+
+    -- Delete entire stacks, starting from largest
+    for count = maxStackCount, 1, -1 do
+        if stacks[count] and table.getn(stacks[count]) > 0 then
+            while excess >= count do
+                local stack = table.remove(stacks[count])
+                
+                ClearCursor()
+                PickupContainerItem(stack.bag, stack.slot)
+                DeleteCursorItem()
+                excess = excess - count
+            end
+        end
+    end
+
+    -- Partial stack deletion (split remaining excess from smallest larger stack)
     if excess > 0 then
-        for bag = 0, 4 do
-            for slot = 1, GetContainerNumSlots(bag) do
-                if shardTest(bag, slot) then
-                    local _, itemCount = GetContainerItemInfo(bag, slot)
+        for count = excess + 1, maxStackCount do
+            if stacks[count] and table.getn(stacks[count]) > 0 then
+                local stack = table.remove(stacks[count])
 
-					-- Amount to remove from this stack
-					local deleteAmount = math.min(itemCount, excess)
-					
-                    if SCF_SPAM == true then
-                        DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Deleting " .. GetContainerItemLink(bag, slot) .. " with " .. deleteAmount .. " shards from bag: " .. bag .. " slot: " .. slot)
-                    end
-
-					if deleteAmount == itemCount then
-	                    -- Delete the entire stack
-	                    PickupContainerItem(bag, slot)
-	                    DeleteCursorItem()
-	                else
-	                    -- Split only the amount we need to delete
-	                    SplitContainerItem(bag, slot, deleteAmount)
-	                    DeleteCursorItem()
-	                end
-					excess = excess - deleteAmount
-                    if excess <= 0 then
-						return
-					end
+                ClearCursor()
+                SplitContainerItem(stack.bag, stack.slot, excess)
+                if CursorHasItem() then
+                    DeleteCursorItem()
                 end
+                return
             end
         end
     end
@@ -60,22 +79,10 @@ function shardTest(b, s)
 	-- GetContainerItemLink returns a long string, where the item's ID is part of the string. 
 	-- Returns "nil" if empty bag slot, which we don't like, since we save it to local itemLink 
 	-- So we have to handle that
-	local itemLink
-	
-	if GetContainerItemLink(b,s) == nil then
-		itemLink = 'noitem'
-	else
-		itemLink = GetContainerItemLink(b,s)
-	end 
+	local itemLink = GetContainerItemLink(b, s) or "noitem"
 		
 	-- Test if a given item is a shard with LUA's string.find(x,y) function.
-	if string.find(itemLink, shardID) then
-		--DEFAULT_CHAT_FRAME:AddMessage("------> Is shard: " .. itemLink .. "<------")
-		return true
-	else
-		--DEFAULT_CHAT_FRAME:AddMessage("Not shard: " .. itemLink)
-		return false
-	end
+	return string.find(itemLink, shardID) ~= nil
 end
 
 -- Events to listen for:
