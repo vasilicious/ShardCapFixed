@@ -21,6 +21,7 @@ function ShardCapFixed(param)
 
 	    if num and num > 0 and num % 1 == 0 then
 	        SCF_CAP_VALUE = num
+	        DEFAULT_CHAT_FRAME:AddMessage("[SCF] Soul shards cap changed to: " .. num)
 	        printCap()
 	    else
 	        DEFAULT_CHAT_FRAME:AddMessage("[SCF] You must use a positive integer value.")
@@ -117,8 +118,19 @@ function toggleNotifications()
 end
 
 function printCap()
-	local str = "[SCF] Current cap is " .. SCF_CAP_VALUE .. " shard" .. (SCF_CAP_VALUE ~= 1 and "s" or "") .. "."
-	DEFAULT_CHAT_FRAME:AddMessage(str)
+    local totalShards = 0
+
+    for bag = 0, 4 do
+        for slot = 1, GetContainerNumSlots(bag) do
+            if isSoulShard(bag, slot) then
+                local _, itemCount = GetContainerItemInfo(bag, slot)
+                totalShards = totalShards + itemCount
+            end
+        end
+    end
+
+    local str = "[SCF] Current soul shards: " .. totalShards .. "/" .. SCF_CAP_VALUE .. " shard" .. (SCF_CAP_VALUE ~= 1 and "s" or "") .. "."
+    DEFAULT_CHAT_FRAME:AddMessage(str)
 end
 
 function printHelp()
