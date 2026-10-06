@@ -1,4 +1,4 @@
-# ShardCapPlus for Turtle WoW.
+# ShardCapFixed for Turtle WoW.
 
 Super lightweight and invisible addon.
 
@@ -12,19 +12,19 @@ At levels 10-20, I normally set it 5 because bags are small and soulbags come la
 
 ## Install
 - Unzip. 
-- Enter "ShardCapPlus-main"-folder
-- Move the "ShardCapPlus" folder into the addons folder. 
+- Enter "ShardCapFixed-main"-folder
+- Move the "ShardCapFixed" folder into the addons folder. 
 
 ## Slash commands
-- Show cap: /shardcapplus    
+- Show cap: /scf    
 
-- Change cap: /shardcapplus NUMBER
+- Change cap: /scf NUMBER
 
-- Example: /shardcapplus 5
+- Example: /scf 5
   
 ### More information: 
 
-- /shardcapplus info
+- /scf info
 
 ## Recent changes:
 
@@ -32,4 +32,4 @@ At levels 10-20, I normally set it 5 because bags are small and soulbags come la
 - Changed default to 12 (up from 5)
 
 ## Fork Information
-This is a fork of the original ShardCap addon, modified to work with servers where Soul Shards stack (up to 3 per bag slot on Turtle WoW).
+This is a fork of the original ShardCap addon, modified to work with servers where Soul Shards stack (up to 3 per bag slot on Turtle WoW), with partial delete.

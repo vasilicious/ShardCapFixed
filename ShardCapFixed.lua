@@ -1,6 +1,6 @@
--- ShardCapPlus.lua
-SHARDCAPPLUS_CAP_VALUE=12;
-SHARDCAPPLUS_SPAM=false; 
+-- ShardCapFixed.lua
+SCF_CAP_VALUE=12;
+SCF_SPAM=false; 
 
 function delShards(cap)
     local total_shards = 0
@@ -15,8 +15,8 @@ function delShards(cap)
     end
 
     -- Display total shards found if spam is enabled
-    if SHARDCAPPLUS_SPAM == true then
-        DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - Total [Soul Shard] found: " .. total_shards)
+    if SCF_SPAM == true then
+        DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Total [Soul Shard] found: " .. total_shards)
     end
 
     -- Delete shards if total exceeds the cap
@@ -30,8 +30,8 @@ function delShards(cap)
 					-- Amount to remove from this stack
 					local deleteAmount = math.min(itemCount, excess)
 					
-                    if SHARDCAPPLUS_SPAM == true then
-                        DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - Deleting " .. GetContainerItemLink(bag, slot) .. " with " .. deleteAmount .. " shards from bag: " .. bag .. " slot: " .. slot)
+                    if SCF_SPAM == true then
+                        DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Deleting " .. GetContainerItemLink(bag, slot) .. " with " .. deleteAmount .. " shards from bag: " .. bag .. " slot: " .. slot)
                     end
 
 					if deleteAmount == itemCount then
@@ -95,11 +95,11 @@ f:SetScript('OnEvent', function()
 
 	if bag and combat then
 		bag, combat = nil, nil
-		delShards(SHARDCAPPLUS_CAP_VALUE);
+		delShards(SCF_CAP_VALUE);
 	end
 end)
 
-function ShardCapPlus_IsInteger(n)
+function ShardCapFixed_IsInteger(n)
 	-- Returns true if n is an integer.
 	if tonumber(n) ~= math.floor(tonumber(n)) then
 		return false
@@ -108,72 +108,72 @@ function ShardCapPlus_IsInteger(n)
 	end
 end
 
-function ShardCapPlus_PrintCap()
+function ShardCapFixed_PrintCap()
 	-- Correct spelling of shard/shards in case the user sets the cap to 1.
 	-- xD smiley face.
-	str = "ShardCapPlus - Current cap is "..SHARDCAPPLUS_CAP_VALUE.." shard";
-	if SHARDCAPPLUS_CAP_VALUE ~= 1 then 
+	str = "ShardCapFixed - Current cap is "..SCF_CAP_VALUE.." shard";
+	if SCF_CAP_VALUE ~= 1 then 
 		str = str.."s"
 	end 
 	DEFAULT_CHAT_FRAME:AddMessage(str..".");
 end
 
-function ShardCapPlus_PrintInfo()
-	DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - Change cap: /shardcapplus <number> ... For example: /shardcapplus 5");
-	DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - Show cap: /shardcapplus");
-	DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - Notifications: /shardcapplus spam");
-	DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - Manual delete: /shardcapplus delete");
-	DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - Deletes when you exit combat. Deletes from backpack first. Put your soulbag in your last bag slot, like a normal person. Cheers.");
-	DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - Website: www.github.com/dogmax/ShardCapPlus");
+function ShardCapFixed_PrintInfo()
+	DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Change cap: /scf <number> ... For example: /scf 5");
+	DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Show cap: /scf");
+	DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Notifications: /scf spam");
+	DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Manual delete: /scf delete");
+	DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Deletes when you exit combat. Deletes from backpack first. Put your soulbag in your last bag slot, like a normal person. Cheers.");
+	DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Website: www.github.com/dogmax/ShardCapFixed");
 end
 
-function ShardCapPlus_ToggleSpam()
-	local msg ="ShardCapPlus - Notifications ";
+function ShardCapFixed_ToggleSpam()
+	local msg ="ShardCapFixed - Notifications ";
 
-	if SHARDCAPPLUS_SPAM == true then 
-		SHARDCAPPLUS_SPAM = false; 
+	if SCF_SPAM == true then 
+		SCF_SPAM = false; 
 		msg = msg.."disabled."; 
 	else 
-		SHARDCAPPLUS_SPAM = true; 
+		SCF_SPAM = true; 
 		msg = msg.."enabled.";
 	end 
-	DEFAULT_CHAT_FRAME:AddMessage(msg.." To change it: /shardcapplus spam");
+	DEFAULT_CHAT_FRAME:AddMessage(msg.." To change it: /scf spam");
 end
 
-function ShardCapPlus(parameter) 
+function ShardCapFixed(parameter) 
 	if parameter == '' then
-		ShardCapPlus_PrintCap();
-		DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - Change cap: /shardcapplus <number> ... For example: /shardcapplus 5");
-		DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - More information type: /shardcapplus info");
+		ShardCapFixed_PrintCap();
+		DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Change cap: /scf <number> ... For example: /scf 5");
+		DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - More information type: /scf info");
 	end
 
 	if parameter == "info" then
 		DEFAULT_CHAT_FRAME:AddMessage("--- --- --- --- --- ---");
-		ShardCapPlus_PrintInfo();
+		ShardCapFixed_PrintInfo();
 	end
 	
 	-- toggle spam 
 	if parameter == "spam" then
-		ShardCapPlus_ToggleSpam();
+		ShardCapFixed_ToggleSpam();
 	end 
 	
 	-- check if parameter is a number (this if clause seems weird, but it's not)
 	if type(tonumber(parameter)) == "number" then
 		-- If parameter is a number, check for integer
-		if ShardCapPlus_IsInteger(parameter) then
-			-- If it IS an integer, we set the new value for SHARDCAPPLUS_CAP_VALUE..., account for negative numbers. 
-			SHARDCAPPLUS_CAP_VALUE = math.abs(parameter); 
-			ShardCapPlus_PrintCap();
+		if ShardCapFixed_IsInteger(parameter) then
+			-- If it IS an integer, we set the new value for SCF_CAP_VALUE..., account for negative numbers. 
+			SCF_CAP_VALUE = math.abs(parameter); 
+			ShardCapFixed_PrintCap();
 		else 
-			-- If it is NOT and integer, we tell them to type /shardcapplus info for more information or something... 
-			DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - You must use an integer for example 1 or 5 or 28.");
+			-- If it is NOT and integer, we tell them to type /scf info for more information or something... 
+			DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - You must use an integer for example 1 or 5 or 28.");
 		end 
 	end
 	
 	if parameter == "delete" then
-		delShards(SHARDCAPPLUS_CAP_VALUE)
+		delShards(SCF_CAP_VALUE)
 	end
 end
 
-SLASH_SHARDCAPPLUS1 = '/scf'
-SlashCmdList["SHARDCAPPLUS"] = ShardCapPlus
+SLASH_SCF1 = '/scf'
+SlashCmdList["SCF"] = ShardCapFixed
