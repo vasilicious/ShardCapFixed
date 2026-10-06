@@ -124,7 +124,6 @@ function ShardCapFixed_PrintInfo()
 	DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Notifications: /scf spam");
 	DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Manual delete: /scf delete");
 	DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Deletes when you exit combat. Deletes from backpack first. Put your soulbag in your last bag slot, like a normal person. Cheers.");
-	DEFAULT_CHAT_FRAME:AddMessage("ShardCapFixed - Website: www.github.com/dogmax/ShardCapFixed");
 end
 
 function ShardCapFixed_ToggleSpam()
