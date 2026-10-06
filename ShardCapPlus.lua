@@ -20,23 +20,33 @@ function delShards(cap)
     end
 
     -- Delete shards if total exceeds the cap
-    if total_shards > cap then
-        local done = false
+	local excess = total_shards - cap
+    if excess > 0 then
         for bag = 0, 4 do
-            if done then break end
             for slot = 1, GetContainerNumSlots(bag) do
-                if done then break end
                 if shardTest(bag, slot) then
                     local _, itemCount = GetContainerItemInfo(bag, slot)
+
+					-- Amount to remove from this stack
+					local deleteAmount = math.min(itemCount, excess)
+					
                     if SHARDCAPPLUS_SPAM == true then
-                        DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - Deleting " .. GetContainerItemLink(bag, slot) .. " with " .. itemCount .. " shards from bag: " .. bag .. " slot: " .. slot)
+                        DEFAULT_CHAT_FRAME:AddMessage("ShardCapPlus - Deleting " .. GetContainerItemLink(bag, slot) .. " with " .. deleteAmount .. " shards from bag: " .. bag .. " slot: " .. slot)
                     end
-                    PickupContainerItem(bag, slot)
-                    DeleteCursorItem()
-                    total_shards = total_shards - itemCount
-                    if total_shards <= cap then
-                        done = true
-                    end
+
+					if deleteAmount == itemCount then
+	                    -- Delete the entire stack
+	                    PickupContainerItem(bag, slot)
+	                    DeleteCursorItem()
+	                else
+	                    -- Split only the amount we need to delete
+	                    SplitContainerItem(bag, slot, deleteAmount)
+	                    DeleteCursorItem()
+	                end
+					excess = excess - deleteAmount
+                    if excess <= 0 then
+						return
+					end
                 end
             end
         end
@@ -165,5 +175,5 @@ function ShardCapPlus(parameter)
 	end
 end
 
-SLASH_SHARDCAPPLUS1 = '/shardcapplus'
+SLASH_SHARDCAPPLUS1 = '/scf'
 SlashCmdList["SHARDCAPPLUS"] = ShardCapPlus
